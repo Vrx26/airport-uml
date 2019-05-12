@@ -1,0 +1,14 @@
+{% extends "template.html" %}
+{% block content %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset>
+                {{form}}
+            </fieldset>
+            <div>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

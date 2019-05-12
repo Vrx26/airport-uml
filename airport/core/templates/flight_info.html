@@ -1,0 +1,139 @@
+{% extends "template.html" %}
+{% block content %}
+    <div>
+        Информация о рейсе {{flight.flight_id}}:
+            <div>
+                Время вылета:
+                {{flight.departure_time|date:'H:i d-m-Y'}}
+            </div>
+            <div>
+                Время прилета:
+                {{flight.arrival_time|date:'H:i d-m-Y'}}
+            </div>
+            <div>
+                Аэропорт отправления:
+                {{flight.departure_place.airport_name}}, {{flight.departure_place.city}}
+            </div>
+            <div>
+                Аэропорт прибытия:
+                {{flight.arrival_place.airport_name}}, {{flight.arrival_place.city}}
+            </div>
+            <div>
+                Самолет: {{flight.plane_model}}
+            </div>
+    </div>
+    <hr>
+    <div>
+        Цены (за 1 место):
+        <table border="1px">
+            <tr>
+                <td>
+
+                </td>
+                <td>
+                    Эконом класс
+                </td>
+                <td>
+                    Бизнес класс
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Цена места
+                </td>
+                <td>
+                    {{econom.price}}
+                </td>
+                <td>
+                    {{business.price}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Багаж(1 место)
+                </td>
+                <td>
+                    {{econom.luggage_price}}
+                </td>
+                <td>
+                    {{business.luggage_price}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Детское место
+                </td>
+                <td>
+                    {{econom.child_place_price}}
+                </td>
+                <td>
+                    {{business.child_place_price}}
+                </td>
+            </tr>
+        </table>
+
+        <hr>
+        Купить билет:
+
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <div>
+                    <label>Тип места:</label>
+                    <br>
+                    {% for choice in form.place_type %}
+                        <span class="radio">{{ choice.tag }}</span>
+                        {{choice.choice_label}}
+                        <br>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{form.amount.label}}
+                    {{form.amount}}
+                </div>
+                <div>
+                    {{form.luggage_amount.label}}
+                    {{form.luggage_amount}}
+                </div>
+                <div>
+                    {{form.children_amount.label}}
+                    {{form.children_amount}}
+                </div>
+
+                <h4>Информация покупателя:</h4>
+                <div>
+                    {{form.last_name.label}}
+                    {{form.last_name}}
+                </div>
+                <div>
+                    {{form.name.label}}
+                    {{form.name}}
+                </div>
+                <div>
+                    {{form.second_name.label}}
+                    {{form.second_name}}
+                </div>
+                <div>
+                    {{form.passport_series.label}}
+                    {{form.passport_series}}
+                </div>
+                <div>
+                    {{form.passport_number.label}}
+                    {{form.passport_number}}
+                </div>
+
+                <div>
+                    {{form.email.label}}
+                    {{form.email}}
+                </div>
+            </fieldset>
+
+            <script>
+
+            </script>
+            <div>
+                <button type="submit">Купить</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

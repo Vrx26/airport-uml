@@ -1,0 +1,33 @@
+{% extends "template.html" %}
+{% block content %}
+    <div>
+    {% for flight in flights %}
+        <div>
+            <div>
+                Номер рейса:
+                <a href="flight/{{flight.flight_id}}">{{flight.flight_id}}</a>
+            </div>
+            <div>
+                Время вылета:
+                {{flight.departure_time|date:'H:i d-m-Y'}}
+            </div>
+            <div>
+                Время прилета:
+                {{flight.arrival_time|date:'H:i d-m-Y'}}
+            </div>
+            <div>
+                Аэропорт отправления:
+                {{flight.departure_place.airport_name}}, {{flight.departure_place.city}}
+            </div>
+            <div>
+                Аэропорт прибытия:
+                {{flight.arrival_place.airport_name}}, {{flight.arrival_place.city}}
+            </div>
+            <div>
+                Самолет: {{flight.plane_model}}
+            </div>
+        </div>
+        <hr>
+    {% endfor %}
+    </div>
+{% endblock content %}
