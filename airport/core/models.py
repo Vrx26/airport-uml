@@ -25,3 +25,19 @@ class Place(models.Model):
     luggage_price = models.IntegerField()
     child_place_price = models.IntegerField()
 
+
+class Customer(models.Model):
+    user_id = models.AutoField(primary_key=True)
+    last_name = models.CharField(max_length=60)
+    name = models.CharField(max_length=60)
+    second_name = models.CharField(max_length=60)
+    passport_series = models.IntegerField()
+    passport_number = models.IntegerField()
+    email = models.CharField(max_length=60, unique=True)
+
+
+class Order(models.Model):
+    order_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    order_sum = models.IntegerField()

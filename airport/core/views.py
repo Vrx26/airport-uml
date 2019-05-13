@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
-from .forms import SearchForm, Order
-from .models import Flight, Place
+from .forms import SearchForm, OrderForm
+from .models import Flight, Place, Customer, Order
 
 # Create your views here.
 
@@ -43,8 +42,8 @@ def flight_registration(request, id):
         elif place.place_type == 1:
             business = place
 
-    if request.method == 'POST':
-        form = Order(request.POST)
+    if request.method == 'POST':  # process user data
+        form = OrderForm(request.POST)
         if form.is_valid():
             if type == '0':
                 sum = form.cleaned_data['amount'] * econom.price + form.cleaned_data['luggage_amount'] * econom.luggage_price + form.cleaned_data['children_amount'] * econom.children_price
@@ -63,13 +62,39 @@ def flight_registration(request, id):
                     'number': form.cleaned_data['passport_number'],
                     'email': form.cleaned_data['email']}
 
-            if check_payment():
+            if data['type'] == '0':
+                place = econom
+            else:
+                place = business
+
+            if check_payment() and place.free_places >= data['amount']:
+                # adding user to the db
+                if Customer.objects.filter(email=data['email']).first() is None:
+                    customer = Customer(last_name=data['last_name'],
+                                        name=data['name'],
+                                        second_name=data['second_name'],
+                                        passport_series=data['series'],
+                                        passport_number=data['number'],
+                                        email=data['email'])
+                    customer.save()
+
+                # adding order details to the db
+                customer = Customer.objects.get(email=data['email'])
+
+                # decreasing amount of free places
+                place.free_places -= data['amount']
+                place.save()
+
+                order = Order(customer=customer,
+                              place=place,
+                              order_sum=data['sum'])
+                order.save()
+
                 send_email(data)
                 return render(request, 'thanks.html')
             else:
                 return render(request, 'Error.html')
 
-
-    else:
-        form = Order()
+    else:  # render form for user
+        form = OrderForm()
         return render(request, 'flight_info.html', {'form':form, 'flight': flight, 'econom': econom, 'business':business, 'title': id})

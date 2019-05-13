@@ -8,7 +8,7 @@ class SearchForm(forms.Form):
     arrival_place = forms.CharField(label='Куда:', max_length=100)
 
 
-class Order(forms.Form):
+class OrderForm(forms.Form):
     CHOICES = [('0', 'Эконом класс'),
                ('1', 'Бизнес класс')]
 
