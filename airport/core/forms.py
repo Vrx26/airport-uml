@@ -1,4 +1,6 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from .models import CustomUser
 from django.forms.widgets import SelectDateWidget, EmailInput
 
 
@@ -18,10 +20,26 @@ class OrderForm(forms.Form):
     luggage_amount = forms.IntegerField(label='Количество мест с багажом:', widget=forms.NumberInput, initial=0)  # TODO validator
     children_amount = forms.IntegerField(label='Количество мест для детей:', widget=forms.NumberInput, initial=0)  # TODO validator
 
-    last_name = forms.CharField(label='Фамилия', max_length=100)
-    name = forms.CharField(label='Имя', max_length=100)
-    second_name = forms.CharField(label='Отчество', max_length=100)
-    passport_series = forms.IntegerField(label='Серия паспорта')
-    passport_number = forms.IntegerField(label='Номер паспорта')
-    email = forms.CharField(label='email', widget=EmailInput)
 
+class CustomUserCreationForm(UserCreationForm):
+    last_name = forms.CharField(label='Фамилия')
+    first_name = forms.CharField(label='Имя')
+    second_name = forms.CharField(label='Отчество')
+    passport_series = forms.CharField(label='Серия паспорта')
+    passport_number = forms.CharField(label='Номер паспорта')
+
+
+    class Meta(UserCreationForm):
+        model = CustomUser
+        fields = ('username', 'email',
+                  'passport_series', 'last_name',
+                  'first_name', 'passport_number',
+                  'second_name')
+
+
+class CustomUserChangeForm(UserChangeForm):
+    passport_series = forms.CharField(label='Серия паспорта')
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'passport_series')

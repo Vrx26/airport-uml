@@ -73,8 +73,8 @@
         </table>
 
         <hr>
+        {% if user.is_authenticated %}
         Купить билет:
-
         <form method="POST">
             {% csrf_token %}
             <fieldset>
@@ -99,34 +99,6 @@
                     {{form.children_amount.label}}
                     {{form.children_amount}}
                 </div>
-
-                <h4>Информация покупателя:</h4>
-                <div>
-                    {{form.last_name.label}}
-                    {{form.last_name}}
-                </div>
-                <div>
-                    {{form.name.label}}
-                    {{form.name}}
-                </div>
-                <div>
-                    {{form.second_name.label}}
-                    {{form.second_name}}
-                </div>
-                <div>
-                    {{form.passport_series.label}}
-                    {{form.passport_series}}
-                </div>
-                <div>
-                    {{form.passport_number.label}}
-                    {{form.passport_number}}
-                </div>
-
-                <div>
-                    {{form.email.label}}
-                    {{form.email}}
-                </div>
-
             </fieldset>
 
             <script>
@@ -135,5 +107,6 @@
                 <button type="submit">Купить</button>
             </div>
         </form>
+        {% endif %}
     </div>
 {% endblock content %}

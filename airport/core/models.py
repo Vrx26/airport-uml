@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 class Airport(models.Model):
     airport_id = models.CharField(max_length=4)
@@ -26,18 +27,17 @@ class Place(models.Model):
     child_place_price = models.IntegerField()
 
 
-class Customer(models.Model):
-    user_id = models.AutoField(primary_key=True)
-    last_name = models.CharField(max_length=60)
-    name = models.CharField(max_length=60)
-    second_name = models.CharField(max_length=60)
-    passport_series = models.IntegerField()
-    passport_number = models.IntegerField()
-    email = models.CharField(max_length=60, unique=True)
+class CustomUser(AbstractUser):
+    passport_series = models.CharField(default='', max_length=10)
+    passport_number = models.CharField(default='', max_length=12)
+    second_name = models.CharField(default='', max_length=60)
+
+    def __str__(self):
+        return self.email
 
 
 class Order(models.Model):
     order_id = models.AutoField(primary_key=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     order_sum = models.IntegerField()

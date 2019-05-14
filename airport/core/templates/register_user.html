@@ -1,0 +1,51 @@
+{% extends "template.html" %}
+{% block content %}
+    <h4>Регистрация:</h4>
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <h5> Данные аккаунта</h5>
+            <div>
+                {{form.username.label}}
+                {{form.username}}
+            </div>
+            <div>
+                {{form.email.label}}
+                {{form.email}}
+            </div>
+            <div>
+                {{form.password1.label}}
+                {{form.password1}}
+            </div>
+            <div>
+                {{form.password2.label}}
+                {{form.password2}}
+            </div>
+            <hr>
+            <div>
+                {{form.last_name.label}}
+                {{form.last_name}}
+            </div>
+            <div>
+                {{form.first_name.label}}
+                {{form.first_name}}
+            </div>
+            <div>
+                {{form.second_name.label}}
+                {{form.second_name}}
+            </div>
+            <div>
+                {{form.passport_series.label}}
+                {{form.passport_series}}
+            </div>
+            <div>
+                {{form.passport_number.label}}
+                {{form.passport_number}}
+            </div>
+        </fieldset>
+        <div>
+            <button type="submit">Регистрация</button>
+        </div>
+    </form>
+
+{% endblock content %}

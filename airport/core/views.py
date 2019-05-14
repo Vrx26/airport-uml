@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
-from .forms import SearchForm, OrderForm
-from .models import Flight, Place, Customer, Order
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+from django.contrib.auth.forms import UserCreationForm
+from .forms import SearchForm, OrderForm, CustomUserCreationForm
+from .models import Flight, Place, Order, CustomUser
 
 # Create your views here.
 
@@ -54,13 +57,7 @@ def flight_registration(request, id):
                     'amount': form.cleaned_data['amount'],
                     'luggage_amount': form.cleaned_data['luggage_amount'],
                     'children_amount': form.cleaned_data['children_amount'],
-                    'sum': sum,
-                    'last_name': form.cleaned_data['last_name'],
-                    'name': form.cleaned_data['name'],
-                    'second_name': form.cleaned_data['second_name'],
-                    'series': form.cleaned_data['passport_series'],
-                    'number': form.cleaned_data['passport_number'],
-                    'email': form.cleaned_data['email']}
+                    'sum': sum}
 
             if data['type'] == '0':
                 place = econom
@@ -68,24 +65,15 @@ def flight_registration(request, id):
                 place = business
 
             if check_payment() and place.free_places >= data['amount']:
-                # adding user to the db
-                if Customer.objects.filter(email=data['email']).first() is None:
-                    customer = Customer(last_name=data['last_name'],
-                                        name=data['name'],
-                                        second_name=data['second_name'],
-                                        passport_series=data['series'],
-                                        passport_number=data['number'],
-                                        email=data['email'])
-                    customer.save()
 
-                # adding order details to the db
-                customer = Customer.objects.get(email=data['email'])
+                user = request.user
+                print(user.id)
 
                 # decreasing amount of free places
                 place.free_places -= data['amount']
                 place.save()
 
-                order = Order(customer=customer,
+                order = Order(customer=user,
                               place=place,
                               order_sum=data['sum'])
                 order.save()
@@ -98,3 +86,16 @@ def flight_registration(request, id):
     else:  # render form for user
         form = OrderForm()
         return render(request, 'flight_info.html', {'form':form, 'flight': flight, 'econom': econom, 'business':business, 'title': id})
+
+
+class SignUp(CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'register_user.html'
+
+
+def orders(request):
+
+    orders_list={}
+
+    return render(request, 'orders.html', {'orders': orders_list})
