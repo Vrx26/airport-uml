@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.contrib.auth.forms import UserCreationForm
 from .forms import SearchForm, OrderForm, CustomUserCreationForm
 from .models import Flight, Place, Order, CustomUser
 
@@ -29,7 +28,10 @@ def search(request):
                                             departure_time__day=departure_date.day,
                                             departure_place__city=departure_place,
                                             arrival_place__city=arrival_place)
-            return render(request, 'result.html', {'flights': flights, 'title': 'Результат'})
+            if flights.first() is None:
+                return render(request, 'not_found.html')
+            else:
+                return render(request, 'result.html', {'flights': flights, 'title': 'Результат'})
     else:
         form = SearchForm()
         return render(request, 'search.html', {'form': form, 'title': 'Поиск'})
