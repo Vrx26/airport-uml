@@ -97,7 +97,6 @@ class SignUp(CreateView):
 
 
 def orders(request):
-
-    orders_list={}
-
-    return render(request, 'orders.html', {'orders': orders_list})
+    user = request.user
+    orders_list = Order.objects.filter(customer=user)
+    return render(request, 'orders.html', {'orders': orders_list, 'user': user})

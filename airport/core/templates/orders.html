@@ -1,0 +1,23 @@
+{% extends "template.html" %}
+{% block content %}
+    <div>
+        <div>
+            <h3>Информация о пользователе</h3>
+            Фамилия: {{ user.last_name }}<br>
+            Имя: {{ user.first_name }}<br>
+            Отчество: {{ user.second_name }}<br>
+            Паспорт(серия/номер): {{ user.passport_series }}/{{ user.passport_number }}<br>
+            email: {{ user.email }}
+        </div>
+        <h3>Заказы</h3>
+        {% for order in orders %}
+            <div>
+                Номер заказа: {{order.order_id}}<br>
+                Отправление: {{order.place.flight.departure_place.city}}, {{order.place.flight.departure_place.airport_name}}, {{order.place.flight.departure_time|date:'H:i d-m-Y'}}<br>
+                Прибытие: {{order.place.flight.arrival_place.city}}, {{order.place.flight.arrival_place.airport_name}}, {{order.place.flight.arrival_time|date:'H:i d-m-Y'}}<br>
+                Сумма заказа: {{order.order_sum}}<br>
+            </div>
+        <hr>
+        {% endfor %}
+    </div>
+{% endblock content %}
