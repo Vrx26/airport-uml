@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+import asyncio
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'airport.settings')
